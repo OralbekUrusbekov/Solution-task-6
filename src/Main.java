@@ -1,8 +1,15 @@
 import Part1.*;
 import Part2.*;
 
+import java.util.Arrays;
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("-------------------Part 1--------------------");
+        System.out.println("---------------------------------------------");
         // Create handlers
         SupportHandler faq = new FAQBotHandler();
         SupportHandler junior = new JuniorSupportHandler();
@@ -27,28 +34,48 @@ public class Main {
         }
 
 
-        System.out.println("---------------------------------------");
-        System.out.println("---------------------------------------");
-        System.out.println("---------------------------------------");
-        System.out.println("---------------------------------------");
+        System.out.println("-------------------Part 2--------------------");
+        System.out.println("---------------------------------------------");
 
 
+
+        // Create device instances (Receivers)
         Light light = new Light();
         Thermostat thermostat = new Thermostat();
+        DoorLock doorLock = new DoorLock();
 
-
+        // Create concrete commands
         Command lightOn = new TurnOnLightCommand(light);
-        Command thermoSet = new SetThermostatCommand(thermostat, 22);
+        Command setTemp22 = new SetThermostatCommand(thermostat, 22);
+        Command lockDoor = new LockDoorCommand(doorLock);
 
+        // Create macro command for "Goodnight mode"
+        Command goodnightMode = new MacroCommand(Arrays.asList(
+                lightOn, setTemp22, lockDoor
+        ));
+
+        // Create remote and assign commands
         SmartHomeRemoteControl remote = new SmartHomeRemoteControl();
-        remote.setCommand("A", lightOn);
-        remote.setCommand("B", thermoSet);
+        remote.setCommand("light_on", lightOn);
+        remote.setCommand("set_temp", setTemp22);
+        remote.setCommand("lock_door", lockDoor);
+        remote.setCommand("goodnight", goodnightMode);
 
+        // CLI loop for user input
+        while (true) {
+            System.out.println("\n=== Smart Home Remote ===");
+            remote.showSlots();
+            System.out.println("Type command name, or 'undo', 'redo', 'exit':");
+            System.out.print("> ");
 
-        remote.pressButton("A");
-        remote.pressButton("B");
+            String input = scanner.nextLine().trim().toLowerCase();
 
+            if (input.equals("exit")) break;
+            else if (input.equals("undo")) remote.undoButton();
+            else if (input.equals("redo")) remote.redoButton();
+            else remote.pressButton(input);
+        }
 
-        remote.undoButton();
+        scanner.close();
     }
 }

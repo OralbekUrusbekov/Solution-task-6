@@ -1,5 +1,6 @@
 package Part2;
 
+// Concrete Command to turn on the light
 public class TurnOnLightCommand implements Command {
     private Light light;
 
@@ -8,10 +9,11 @@ public class TurnOnLightCommand implements Command {
     }
 
     public void execute() {
-        light.on();
+        light.turnOn();
     }
 
     public void undo() {
-        light.off();
+        light.turnOff();
     }
 }
+

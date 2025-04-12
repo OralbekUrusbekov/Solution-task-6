@@ -1,20 +1,22 @@
 package Part2;
 
+// Concrete Command to set thermostat temperature
 public class SetThermostatCommand implements Command {
     private Thermostat thermostat;
-    private int temperature;
+    private int temp;
 
-    public SetThermostatCommand(Thermostat thermostat, int temperature) {
+    public SetThermostatCommand(Thermostat thermostat, int temp) {
         this.thermostat = thermostat;
-        this.temperature = temperature;
+        this.temp = temp;
     }
 
     public void execute() {
-        thermostat.setTemperature(temperature);
+        thermostat.setTemperature(temp);
     }
 
     public void undo() {
-        thermostat.reset();
+        thermostat.undo();
     }
 }
+
 
