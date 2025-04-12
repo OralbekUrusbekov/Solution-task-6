@@ -1,4 +1,5 @@
 import Part1.*;
+import Part2.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -24,5 +25,30 @@ public class Main {
                 System.out.println("[Error] " + e.getMessage());
             }
         }
+
+
+        System.out.println("---------------------------------------");
+        System.out.println("---------------------------------------");
+        System.out.println("---------------------------------------");
+        System.out.println("---------------------------------------");
+
+
+        Light light = new Light();
+        Thermostat thermostat = new Thermostat();
+
+
+        Command lightOn = new TurnOnLightCommand(light);
+        Command thermoSet = new SetThermostatCommand(thermostat, 22);
+
+        SmartHomeRemoteControl remote = new SmartHomeRemoteControl();
+        remote.setCommand("A", lightOn);
+        remote.setCommand("B", thermoSet);
+
+
+        remote.pressButton("A");
+        remote.pressButton("B");
+
+
+        remote.undoButton();
     }
 }
